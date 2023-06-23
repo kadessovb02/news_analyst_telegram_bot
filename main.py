@@ -7,7 +7,6 @@ import random
 import time
 import os
 from dotenv import load_dotenv
-
 class NewsAnalystBot:
 
     def __init__(self, openai_api_key, news_api_key, bot_token):
@@ -19,10 +18,10 @@ class NewsAnalystBot:
 
         self.updater = Updater(token=self.bot_token, use_context=True)
         self.dispatcher = self.updater.dispatcher
-        self.prompt = ("You're a news trader analyst: analyze, remove unnecessary info and "
-                       "summarize this news into 1-2 sentences with key facts (names, numbers, statistics)."
-                       " Add hashtags and make it more interesting by adding text well-readable formatting and "
-                       "emoji for the Telegram channel in english:")
+        self.prompt = ("News Trader Analyst Alert! Your task: analyze, condense, and summarize this news into 1-2 sentences, highlighting key facts (names, numbers, statistics)."
+                       " Enhance with attention-grabbing hashtags, reader-friendly formatting, and captivating emojis for your Telegram channel."
+                       " Let's keep it engaging and concise!")
+
 
     def fetch_news(self):
         response = requests.get(f'https://newsdata.io/api/1/news?apikey={self.news_api_key}&q=bitcoin&language=en')
@@ -88,9 +87,14 @@ if __name__ == '__main__':
     news_api_key = os.environ["NEWS_API_KEY"]
     bot_token = os.environ["BOT_TOKEN"]
     channel_chat_id = int(os.environ["CHANNEL_CHAT_ID"])
-
     bot = NewsAnalystBot(openai_api_key, news_api_key, bot_token)
-    news = bot.fetch_news()
-    existing_links = bot.read_existing_links()
-    updated_links = bot.process_news(news, existing_links, channel_chat_id)
-    bot.write_existing_links(updated_links)
+    while True:
+        sleep_duration = random.uniform(6000, 13000)
+        print("Sleeping for", sleep_duration, "seconds...")
+        time.sleep(sleep_duration)
+        news = bot.fetch_news()
+        existing_links = bot.read_existing_links()
+        updated_links = bot.process_news(news, existing_links, channel_chat_id)
+        bot.write_existing_links(updated_links)
+
+
